@@ -22,7 +22,9 @@ body, html{
     width: 100%;
     height: 100%;
 }
-
+form {
+    padding: 2px;
+}
 .panel{
     background-color: #ffffff;
     width: 500px;
@@ -31,4 +33,14 @@ body, html{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+.diafoot{
+    display: flex;
+    flex-direction: column;
+}
+.saveClose{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    justify-content: flex-end;
 }
