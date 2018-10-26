@@ -9,13 +9,50 @@ class Player {
     }
 }
 let players = [];
+let idPromise = getCourseInfo();
+// let coursePromise = getCourseId();
 
 function buildPlayer(){
     players.push (new Player($('#player').val(),$('#teeBox').val()));
     $('#player').val('');
-    $('#teeBox').val('')
+    $('#teeBox').val('');
+    listPlayers();
 }
 
+function listPlayers(){
+    $('.playerLst').child() // add the player name and tee to the card and the dialog
+}
+
+// calls
+function getCourseInfo() {                
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: "https://golf-courses-api.herokuapp.com/courses/11819",
+            type: 'GET',
+            success: response => {
+                resolve(response);
+            },
+            error: error => {
+                reject(error);
+            }
+        });
+    });
+}
+
+function getCourseId() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: "https://golf-courses-api.herokuapp.com/courses",
+            type: 'GET',
+            success: response => {
+                resolve(response);
+            },
+            error: error => {
+                reject(error);
+            }
+        });
+    });
+}
 
 
 

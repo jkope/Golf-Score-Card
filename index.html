@@ -17,6 +17,7 @@
     <dialog class="mdl-dialog">
         <h4 class="mdl-dialog__title">Player Info</h4>
         <div id="playersinfo" class="mdl-dialog__content">
+            <div class="playerList"></div>
             <form id="player1">
                 <input type="text" class="mdl-textfield__input" name="" id="player" placeholder="Name">
                 <div class="mdl-selectfield mdl-js-selectfield">
@@ -32,26 +33,13 @@
                 </div>
             </form>
         </div>
-            <div class="mdl-dialog__actions">
-                <button type="button" onclick="buildPlayer()" class="mdl-button mdl-button close">SAVE</button>
-                <button type="button" class="mdl-button close">CANCEL</button>
-            </div>
-        </dialog>
-    <!-- <div class="modal">
-        <div class="panel">
-            <span id="course selection"></span>
-            <span>Player Names</span>
-            <input type="text" placeholder="player name">
-            <!-- Colored FAB button with ripple -->
-            <!-- <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
-                <i class="material-icons">add</i>
-            </button> -->
-            <!-- <input type="number" class="numbinput" placeholder="number of players"> 
-            <button id="saveBtn" onclick="addplayers()">Save</button>
+        <div class="mdl-dialog__actions">
+            <button type="button" onclick="buildPlayer()" class="mdl-button mdl-button">SAVE</button>
+            <button type="button" class="mdl-button close">CANCEL</button>
         </div>
-    </div> -->
-    <!-- <div class="card">
-        <h1 class="courseName">...Selector of Course...</h1>
+    </dialog>
+    <div class="card">
+        <h3 class="courseName">Course Name</h3>
         <table class="mdl-data-table mdl-js-data-table">
             <thead>
                 <tr class="hole">
@@ -185,11 +173,6 @@
                 </div>
             </tbody>
         </table>
-
-
- -->
-
     </div>
-    
 </body>
 </html>
