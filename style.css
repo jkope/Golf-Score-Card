@@ -6,6 +6,16 @@
     border: 2px solid darkgray;
     border-radius: 5px;
 }
-/* form {
-    padding: 2px;
-} */
+.names{
+    display: flex;
+    justify-content: space-between;
+}
+.playerList{
+    margin: 10px;
+}
+.namesIn{
+    display: flex;
+}
+#player :focus{
+    outline: none;
+}
