@@ -67,9 +67,10 @@ function dltPlayer(index){
 function getCourseInfo() {                
     return new Promise((resolve, reject) => {
         $.ajax({
-            url: "https://golf-courses-api.herokuapp.com/courses/11819",
+            // url: "https://golf-courses-api.herokuapp.com/courses/11819",
+            url: "temp.json",
             type: 'GET',
-            success: response => {
+            success: (response, status) => {
                 resolve(response);
             },
             error: error => {
@@ -78,6 +79,12 @@ function getCourseInfo() {
         });
     });
 }
+
+
+// to access course name
+idPromise.then(aresult => {
+   console.log(aresult.course.name)
+})
 
 function getCourseId() {
     return new Promise((resolve, reject) => {
