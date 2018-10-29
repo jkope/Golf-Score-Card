@@ -9,7 +9,8 @@ class Player {
 }
 let players = [];
 let idPromise = getCourseInfo();
-let coursePromise = getCourseId();
+// let coursePromise = getCourseId();
+let courseName;
 
 function buildPlayer(){
     players.push (new Player($('#player').val(),$('#teeBox').val()));
@@ -82,24 +83,28 @@ function getCourseInfo() {
 
 
 // to access course name
-idPromise.then(aresult => {
-   console.log(aresult.course.name)
+idPromise.then(nameResult => {
+   console.log(nameResult.course.name);
 })
 
-function getCourseId() {
-    return new Promise((resolve, reject) => {
-        $.ajax({
-            url: "https://golf-courses-api.herokuapp.com/courses",
-            type: 'POST',
-            success: response => {
-                resolve(response);
-            },
-            error: error => {
-                reject(error);
-            }
-        });
-    });
-}
+$('.courseName').html(idPromise.then(resultname =>{
+    return resultname.course.name;
+}))
+
+// function getCourseId() {
+//     return new Promise((resolve, reject) => {
+//         $.ajax({
+//             url: "https://golf-courses-api.herokuapp.com/courses",
+//             type: 'GET',
+//             success: response => {
+//                 resolve(response);
+//             },
+//             error: error => {
+//                 reject(error);
+//             }
+//         });
+//     });
+// }
 
 
 
