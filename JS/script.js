@@ -11,6 +11,7 @@ let players = [];
 let idPromise = getCourseInfo();
 // let coursePromise = getCourseId();
 let courseName;
+let tee = "men";
 
 function buildPlayer(){
     players.push (new Player($('#player').val(),$('#teeBox').val()));
@@ -64,6 +65,18 @@ function dltPlayer(index){
     listPlayers();
 }
 
+function setYards(){
+    for(i=0;i<holeYards.length;i++){
+        $('.y'+(i+1)).text(holeYards[i])
+    }
+}
+
+function setHandicap(){
+    for (i = 0; i < holeCap.length; i++) {
+        $('.h' + (i + 1)).text(holeCap[i])
+    }
+}
+
 // calls
 function getCourseInfo() {                
     return new Promise((resolve, reject) => {
@@ -84,12 +97,49 @@ function getCourseInfo() {
 
 // to access course name
 idPromise.then(nameResult => {
-   console.log(nameResult.course.name);
+    $('.courseName').html(nameResult.course.name);
 })
 
-$('.courseName').html(idPromise.then(resultname =>{
-    return resultname.course.name;
-}))
+// to access tee selections -> teeList[]
+// to access outyardage, inyardage, totalyardage, inPar, outPar, totalPar
+let tees;
+let teeList = []
+idPromise.then(teeChoices =>{
+   tees = teeChoices.course.tee_types;
+   tees.forEach(element => {
+       teeList.push(element.tee_type)
+   });
+    let teeIndex = tees.findIndex((element) => element.tee_type == tee)
+    $('.yOut').html(tees[teeIndex].front_nine_yards);
+    $('.yIn').html(tees[teeIndex].back_nine_yards);
+    $('.yTotal').html(tees[teeIndex].yards);
+    $('.pOut').html(tees[teeIndex].front_nine_par);
+    $('.pIn').html(tees[teeIndex].back_nine_par);
+    $('.pTotal').html(tees[teeIndex].par);
+})
+
+// to access yardage by tee type
+let holesList =[];
+let holeYards = []; //array of yardages based on tee selection (one value per hole 0-17)
+let holeCap = []; //array of handicaps based on tee selection
+idPromise.then(holes => {
+   let y = holes.course.holes;
+   console.log(y)
+   y.forEach(element =>{
+        holesList.push(element.tee_boxes)
+    })
+    holesList.forEach((element) =>{
+        let i = element.findIndex((e) => e.tee_type == tee);
+        holeYards.push(element[i].yards)
+        holeCap.push(element[i].hcp)
+    })
+    setYards();
+    setHandicap();
+})
+
+//to access out yardage by tee type
+
+
 
 // function getCourseId() {
 //     return new Promise((resolve, reject) => {
