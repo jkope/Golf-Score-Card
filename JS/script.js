@@ -56,26 +56,14 @@ function buildCard(holes){
 function addHoles(players,holes){
 
     for(let p=1; p<=players.length; p++){
-        console.log(players[0].name)
         $('#col0').append(`<div id="p${p}" class="column">${players[p-1].name}</div>`);
 
         for(h=1; h<=holes.length; h++){
-            $('#col'+h).append(`<input type="number" class='hole' id="p${p}h${h}">`);
+            $('#col' + h).append(`<input type="number" class='hole' id="p${p}h${h}" onblur="saveScore(${p-1},${h-1},'p${p}h${h}')" >`);
         }
-        $('#out').append(`<div id="out" class="column">${players[p-1].outScore()}</div>`);
-        $('#in').append(`<div id="in" class="column">${players[p-1].inScore()}</div>`);
-        $('#total').append(`<div id="total" class="column">${players[p-1].totalScore()}</div>`);
-    }
-}
-
-
-
-
-
-
-function setYards(){
-    for(i=0;i<holeYards.length;i++){
-        $('.y'+(i+1)).text(holeYards[i])
+        $('#out').append(`<div id="out${p-1}" class="column">${players[p-1].outScore()}</div>`);
+        $('#in').append(`<div id="in${p-1}" class="column">${players[p-1].inScore()}</div>`);
+        $('#total').append(`<div id="total${p-1}" class="column">${players[p-1].totalScore()}</div>`);
     }
 }
 
@@ -104,18 +92,17 @@ function dltPlayer(index){
     listPlayers();
 }
 
-
-function setHandicap(){
-    for (i = 0; i < holeCap.length; i++) {
-        $('.h' + (i + 1)).text(holeCap[i])
-    }
+function saveScore(playerIndex, holeIndex, id){
+    players[playerIndex].holeScore[holeIndex] = Number($("#" + id).val());
+    $('#out'+playerIndex).html(players[playerIndex].outScore());
+    $('#in'+playerIndex).html(players[playerIndex].inScore());
+    $('#total'+playerIndex).html(players[playerIndex].totalScore());
 }
 
 function getCourseInfo() {                
     return new Promise((resolve, reject) => {
         $.ajax({
             url: "https://golf-courses-api.herokuapp.com/courses/11819",
-            // url: "temp.json",
             type: 'GET',
             success: (response, status) => {
                 resolve(response);
@@ -158,7 +145,6 @@ let holeCap = []; //array of handicaps based on tee selection
 let holePar = []; // array of par per hole
 idPromise.then(holes => {
    let y = holes.data.holes;
-//    console.log(y)
    y.forEach(element =>{
         holesList.push(element.teeBoxes)
     })
@@ -168,12 +154,6 @@ idPromise.then(holes => {
         holeCap.push(element[i].hcp)
         holePar.push(element[i].par)
     })
-    console.log(holeYards)
-    console.log(holeCap)
-    console.log(holePar)
-    setYards();
-    setHandicap();
-    
 })
 
 //to access out yardage by tee type
