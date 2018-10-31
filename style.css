@@ -3,8 +3,16 @@
     background-color: lightblue;
 }
 .card{
-    border: 2px solid darkgray;
-    border-radius: 5px;
+    display: flex;
+}
+
+.column{
+    display: flex;
+    flex-direction: column;
+}
+
+.hole{
+    width: 50px;
 }
 .names{
     display: flex;

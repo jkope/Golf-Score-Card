@@ -9,9 +9,33 @@ class Player {
 }
 let players = [];
 let idPromise = getCourseInfo();
-// let coursePromise = getCourseId();
+let coursePromise = getCourseId();
 let courseName;
-let tee = "men";
+let courses = [];
+let tee = "champion";
+
+//trent stuff
+
+function buildCard(numHoles){
+    $('.card').html('');
+    for(let i=1; i<=numHoles; i++){
+        $('.card').append(`<div id="col${i}" class="column"></div>`);
+    }
+}
+
+function addHoles(numPlayers,numHoles){
+    for(let p=1; p<=numPlayers; p++){
+        for(h=1; h<=numHoles; h++){
+            $('#col'+h).append(`<input type="number" class='hole' id="p${p}h${h}">`);
+        }
+    }
+}
+
+
+
+
+
+
 
 function buildPlayer(){
     players.push (new Player($('#player').val(),$('#teeBox').val()));
@@ -50,6 +74,8 @@ function onCard(){
                 <th class="p${i}-Total">${players[i].totalScore()}</th>
             </tr>
         `);
+        buildCard(holesList.length)
+        addHoles(players.length, holesList.length)
     }
 }
 
@@ -81,8 +107,8 @@ function setHandicap(){
 function getCourseInfo() {                
     return new Promise((resolve, reject) => {
         $.ajax({
-            // url: "https://golf-courses-api.herokuapp.com/courses/11819",
-            url: "temp.json",
+            url: "https://golf-courses-api.herokuapp.com/courses/11819",
+            // url: "temp.json",
             type: 'GET',
             success: (response, status) => {
                 resolve(response);
@@ -97,7 +123,7 @@ function getCourseInfo() {
 
 // to access course name
 idPromise.then(nameResult => {
-    $('.courseName').html(nameResult.course.name);
+    $('.courseName').html(nameResult.data.name);
 })
 
 // to access tee selections -> teeList[]
@@ -105,11 +131,11 @@ idPromise.then(nameResult => {
 let tees;
 let teeList = []
 idPromise.then(teeChoices =>{
-   tees = teeChoices.course.tee_types;
+   tees = teeChoices.data.holes[0].teeBoxes;
    tees.forEach(element => {
-       teeList.push(element.tee_type)
+       teeList.push(element.teeType)
    });
-    let teeIndex = tees.findIndex((element) => element.tee_type == tee)
+    let teeIndex = tees.findIndex((element) => element.teeType == tee)+1
     $('.yOut').html(tees[teeIndex].front_nine_yards);
     $('.yIn').html(tees[teeIndex].back_nine_yards);
     $('.yTotal').html(tees[teeIndex].yards);
@@ -122,39 +148,50 @@ idPromise.then(teeChoices =>{
 let holesList =[];
 let holeYards = []; //array of yardages based on tee selection (one value per hole 0-17)
 let holeCap = []; //array of handicaps based on tee selection
+let holePar = []; // array of par per hole
 idPromise.then(holes => {
-   let y = holes.course.holes;
-   console.log(y)
+   let y = holes.data.holes;
+//    console.log(y)
    y.forEach(element =>{
-        holesList.push(element.tee_boxes)
+        holesList.push(element.teeBoxes)
     })
     holesList.forEach((element) =>{
-        let i = element.findIndex((e) => e.tee_type == tee);
+        let i = element.findIndex((e) => e.teeType == tee);
         holeYards.push(element[i].yards)
         holeCap.push(element[i].hcp)
+        holePar.push(element[i].par)
     })
+    console.log(holeYards)
+    console.log(holeCap)
+    console.log(holePar)
     setYards();
     setHandicap();
+    buildCard(holesList.length)
+    addHoles(players.length,holesList.length)
 })
 
 //to access out yardage by tee type
 
 
 
-// function getCourseId() {
-//     return new Promise((resolve, reject) => {
-//         $.ajax({
-//             url: "https://golf-courses-api.herokuapp.com/courses",
-//             type: 'GET',
-//             success: response => {
-//                 resolve(response);
-//             },
-//             error: error => {
-//                 reject(error);
-//             }
-//         });
-//     });
-// }
+function getCourseId() {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: "https://golf-courses-api.herokuapp.com/courses",
+            type: 'GET',
+            success: response => {
+                resolve(response);
+            },
+            error: error => {
+                reject(error);
+            }
+        });
+    });
+}
+
+coursePromise.then(course =>{
+    course.forEach($('#courseSelect').append(`<option value="${course.id}">${course.name}</option>`))
+})
 
 
 
