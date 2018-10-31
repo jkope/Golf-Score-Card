@@ -14,20 +14,57 @@ let courseName;
 let courses = [];
 let tee = "champion";
 
-//trent stuff
 
-function buildCard(numHoles){
+function buildCard(holes){
     $('.card').html('');
-    for(let i=1; i<=numHoles; i++){
-        $('.card').append(`<div id="col${i}" class="column"></div>`);
+    $('.card').append(`<div id="col0" class="column">.</div>`);
+    for(let i=1; i<=holes.length; i++){
+        $('.card').append(`<div id="col${i}" class="column">hole ${i}</div>`);
     }
+    $('.card').append(`<div id="out" class="column">Out</div>`);
+    $('.card').append(`<div id="in" class="column">In</div>`);
+    $('.card').append(`<div id="total" class="column">Total</div>`);
+
+//Yards
+    $('#col0').append(`<div id="yards" class="column">Yardage</div>`);
+    for (let i = 1; i <= holes.length; i++) {
+        $('#col' + i).append(`<div class='yards' id="yards${i}">${holeYards[i - 1]}</div>`);
+    }
+    $('#out').append(`<div class="column">.</div>`);
+    $('#in').append(`<div  class="column">.</div>`);
+    $('#total').append(`<div class="column">${holeYards.reduce((a, b) => a + b, 0)}</div>`);
+
+// Handicap
+    $('#col0').append(`<div id="handicap" class="column">Handicap</div>`);
+    for (let i = 1; i <= holes.length; i++) {
+        $('#col' + i).append(`<div class='handicap' id="handicap${i}">${holeCap[i - 1]}</div>`);
+    }
+    $('#out').append(`<div class="column">.</div>`);
+    $('#in').append(`<div  class="column">.</div>`);
+    $('#total').append(`<div class="column">.</div>`);
+
+// par
+    $('#col0').append(`<div id="par" class="column">Par</div>`);
+    for (let i = 1; i <= holes.length; i++) {
+        $('#col' +i).append(`<div class='par' id="par${i}">${holePar[i-1]}</div>`);
+    }
+    $('#out').append(`<div class="column">.</div>`);
+    $('#in').append(`<div  class="column">.</div>`);
+    $('#total').append(`<div class="column">${holePar.reduce((a, b) => a + b, 0)}</div>`);
 }
 
-function addHoles(numPlayers,numHoles){
-    for(let p=1; p<=numPlayers; p++){
-        for(h=1; h<=numHoles; h++){
+function addHoles(players,holes){
+
+    for(let p=1; p<=players.length; p++){
+        console.log(players[0].name)
+        $('#col0').append(`<div id="p${p}" class="column">${players[p-1].name}</div>`);
+
+        for(h=1; h<=holes.length; h++){
             $('#col'+h).append(`<input type="number" class='hole' id="p${p}h${h}">`);
         }
+        $('#out').append(`<div id="out" class="column">${players[p-1].outScore()}</div>`);
+        $('#in').append(`<div id="in" class="column">${players[p-1].inScore()}</div>`);
+        $('#total').append(`<div id="total" class="column">${players[p-1].totalScore()}</div>`);
     }
 }
 
@@ -36,6 +73,11 @@ function addHoles(numPlayers,numHoles){
 
 
 
+function setYards(){
+    for(i=0;i<holeYards.length;i++){
+        $('.y'+(i+1)).text(holeYards[i])
+    }
+}
 
 function buildPlayer(){
     players.push (new Player($('#player').val(),$('#teeBox').val()));
@@ -46,37 +88,8 @@ function buildPlayer(){
 
 function onCard(){
     $('.cardList').empty();
-    for (i=0; i<players.length; i++){
-        $('.cardList').append(`
-            <tr class="player1">
-                <th class="">${players[i].name}</th>
-                <th class="p${i}-1">${players[i].holeScore[0]}</th>
-                <th class="p${i}-2">${players[i].holeScore[1]}</th>
-                <th class="p${i}-3">${players[i].holeScore[2]}</th>
-                <th class="p${i}-4">${players[i].holeScore[3]}</th>
-                <th class="p${i}-5">${players[i].holeScore[4]}</th>
-                <th class="p${i}-6">${players[i].holeScore[5]}</th>
-                <th class="p${i}-7">${players[i].holeScore[6]}</th>
-                <th class="p${i}-8">${players[i].holeScore[7]}</th>
-                <th class="p${i}-9">${players[i].holeScore[8]}</th>
-                <th class="p${i}-Out">${players[i].outScore()}</th>
-                <th class=""></th>
-                <th class="p${i}-10">${players[i].holeScore[9]}</th>
-                <th class="p${i}-11">${players[i].holeScore[10]}</th>
-                <th class="p${i}-12">${players[i].holeScore[11]}</th>
-                <th class="p${i}-13">${players[i].holeScore[12]}</th>
-                <th class="p${i}-14">${players[i].holeScore[13]}</th>
-                <th class="p${i}-15">${players[i].holeScore[14]}</th>
-                <th class="p${i}-16">${players[i].holeScore[15]}</th>
-                <th class="p${i}-17">${players[i].holeScore[16]}</th>
-                <th class="p${i}-18">${players[i].holeScore[17]}</th>
-                <th class="p${i}-In">${players[i].inScore()}</th>
-                <th class="p${i}-Total">${players[i].totalScore()}</th>
-            </tr>
-        `);
-        buildCard(holesList.length)
-        addHoles(players.length, holesList.length)
-    }
+    buildCard(holesList)
+    addHoles(players, holesList)
 }
 
 function listPlayers(){
@@ -91,11 +104,6 @@ function dltPlayer(index){
     listPlayers();
 }
 
-function setYards(){
-    for(i=0;i<holeYards.length;i++){
-        $('.y'+(i+1)).text(holeYards[i])
-    }
-}
 
 function setHandicap(){
     for (i = 0; i < holeCap.length; i++) {
@@ -103,7 +111,6 @@ function setHandicap(){
     }
 }
 
-// calls
 function getCourseInfo() {                
     return new Promise((resolve, reject) => {
         $.ajax({
@@ -123,7 +130,7 @@ function getCourseInfo() {
 
 // to access course name
 idPromise.then(nameResult => {
-    $('.courseName').html(nameResult.data.name);
+    $('#courseName').html(nameResult.data.name);
 })
 
 // to access tee selections -> teeList[]
@@ -166,8 +173,7 @@ idPromise.then(holes => {
     console.log(holePar)
     setYards();
     setHandicap();
-    buildCard(holesList.length)
-    addHoles(players.length,holesList.length)
+    
 })
 
 //to access out yardage by tee type
