@@ -15,8 +15,14 @@
     <title>Golf Score Card</title>
 </head>
 <body>
-    <button id="show-dialog" type="button" class="mdl-button">Edit Players</button>
+    <button id="show-dialog" type="button" class="mdl-button">Edit Game</button>
     <dialog class="mdl-dialog">
+        <div class="courseSelect">
+            <h4 class="mdl-dialog__title">Select a Course</h4>
+            <select name="courses" id="courseSelect" onchange="setCourse(this.value)"></select>
+        </div>
+        <div class="teeSelect">
+        </div>
         <h4 class="mdl-dialog__title">Player Info</h4>
         <div id="playersinfo" class="mdl-dialog__content">
             <div class="namesIn">
