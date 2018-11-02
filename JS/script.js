@@ -31,7 +31,7 @@ function buildCard(holes){
     $('.card').append(`<div id="in" class="column">In</div>`);
     $('.card').append(`<div id="total" class="column">Total</div>`);
 
-//  Yards
+//  Yards 
     $('#col0').append(`<div id="yards" class="column">Yardage</div>`);
     for (let i = 1; i <= holes.length; i++) {
         $('#col' + i).append(`<div class='yards' id="yards${i}">${holeYards[i - 1]}</div>`);
