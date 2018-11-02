@@ -85,12 +85,14 @@ function setCourse(id){
 function buildPlayer(){
     let name = $('#player').val();
     let namelist = [];
-    players.forEach(e=>{namelist.push(e.name)});
-    if(namelist.includes(name)){
-        $('#player').val('Name Already Used');
+    players.forEach(e=>{namelist.push(e.name.toUpperCase())});
+    if(namelist.includes(name.toUpperCase())){
+        $('#player').val('');
+        $('#player').attr("placeholder","Name Already Used");
         }else{
     players.push (new Player(name));
     $('#player').val('');
+    $('#player').attr("placeholder", "Name");
     listPlayers();
     }
 }
@@ -134,11 +136,17 @@ function saveScore(playerIndex, holeIndex, id){
         " "
     } else{
         if (players[playerIndex].totalScore() < holePar.reduce((a, b) => a + b, 0) ){
-            console.log(players[playerIndex].totalScore() - holePar.reduce((a, b) => a + b, 0) + "awesome")
+            $('#messageBox').empty()
+            $('#messageBox').html(
+                `<h4>${players[playerIndex].name},  ${players[playerIndex].totalScore() - holePar.reduce((a, b) => a + b, 0)}, Great Score!</h4>`)
         } else if (players[playerIndex].totalScore() == holePar.reduce((a, b) => a + b, 0)) {
-            console.log("Right On")
+            $('#messageBox').empty()
+            $('#messageBox').html(
+                `<h4>${players[playerIndex].name},  zero under but also zero over. Par for the course ain't bad.</h4>`)
         }else {
-            console.log("More Practice")
+            $('#messageBox').empty()
+            $('#messageBox').html(
+                `<h4>${players[playerIndex].name}, +${players[playerIndex].totalScore() - holePar.reduce((a, b) => a + b, 0)}, Best keep practicing</h4>`)
         }
     }
     $('#out'+playerIndex).html(players[playerIndex].outScore());
@@ -187,7 +195,7 @@ function getCourseInfo(id) {
 
 //for the MDL dialog box
 let dialog = document.querySelector('dialog');
-let showDialogButton = document.querySelector('#show-dialog');
+let showDialogButton = document.querySelector('#show-dialog1');
 if (!dialog.showModal) {
     dialogPolyfill.registerDialog(dialog);
 }
