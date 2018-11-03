@@ -1,20 +1,35 @@
-
+body{
+    background-image: url("http://www.crystallakegolfcourse.com/_assets/images/hero/16-green.jpg");
+    background-size: cover;
+}
+.wider {
+    width: 500px;
+}
 .card{
     display: flex;
+    padding: 20px;
 }
 
-.column{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.card div{
+    padding: 3px;
 }
 
+#courseName{
+    font-size: 3em;
+    padding: 20px;
+}
 .hole{
-    width: 50px;
+    max-width: 50px;
 }
 .main{
     display: flex;
     flex-direction: column;
+    width: 80%;
+    margin: auto;
+}
+#messageBox{
+    display: flex;
+    justify-content: center;
 }
 .names{
     display: flex;
@@ -28,4 +43,12 @@
 }
 #player :focus{
     outline: none;
+}
+.column {
+    background-color: aliceblue;
+    text-align: center;
+}
+
+input{
+    text-align: center;
 }

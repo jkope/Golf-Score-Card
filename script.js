@@ -23,21 +23,21 @@ getCourseId();
 function buildCard(holes){
     
     $('.card').html('');
-    $('.card').append(`<div id="col0" class="column">.</div>`);
+    $('.card').append(`<div id="col0" class="column">-</div>`);
     for(let i=1; i<=holes.length; i++){
-        $('.card').append(`<div id="col${i}" class="column">hole ${i}</div>`);
+        $('.card').append(`<div id="col${i}" class="column">Hole ${i}</div>`);
     }
-    $('.card').append(`<div id="out" class="column">Out</div>`);
-    $('.card').append(`<div id="in" class="column">In</div>`);
-    $('.card').append(`<div id="total" class="column">Total</div>`);
+    $('.card').append(`<div id="out" class="column">OUT</div>`);
+    $('.card').append(`<div id="in" class="column">IN</div>`);
+    $('.card').append(`<div id="total" class="column">TOTAL</div>`);
 
 //  Yards 
     $('#col0').append(`<div id="yards" class="column">Yardage</div>`);
     for (let i = 1; i <= holes.length; i++) {
         $('#col' + i).append(`<div class='yards' id="yards${i}">${holeYards[i - 1]}</div>`);
     }
-    $('#out').append(`<div class="column">.</div>`);
-    $('#in').append(`<div  class="column">.</div>`);
+    $('#out').append(`<div class="column">-</div>`);
+    $('#in').append(`<div  class="column">-</div>`);
     $('#total').append(`<div class="column">${holeYards.reduce((a, b) => a + b, 0)}</div>`);
 
 //  Handicap
@@ -45,17 +45,17 @@ function buildCard(holes){
     for (let i = 1; i <= holes.length; i++) {
         $('#col' + i).append(`<div class='handicap' id="handicap${i}">${holeCap[i - 1]}</div>`);
     }
-    $('#out').append(`<div class="column">.</div>`);
-    $('#in').append(`<div  class="column">.</div>`);
-    $('#total').append(`<div class="column">.</div>`);
+    $('#out').append(`<div class="column">-</div>`);
+    $('#in').append(`<div  class="column">-</div>`);
+    $('#total').append(`<div class="column">-</div>`);
 
 //  par
     $('#col0').append(`<div id="par" class="column">Par</div>`);
     for (let i = 1; i <= holes.length; i++) {
         $('#col' +i).append(`<div class='par' id="par${i}">${holePar[i-1]}</div>`);
     }
-    $('#out').append(`<div class="column">.</div>`);
-    $('#in').append(`<div  class="column">.</div>`);
+    $('#out').append(`<div class="column">-</div>`);
+    $('#in').append(`<div  class="column">-</div>`);
     $('#total').append(`<div class="column">${holePar.reduce((a, b) => a + b, 0)}</div>`);
 
 }
@@ -130,6 +130,11 @@ function dltPlayer(index){
     listPlayers();
 }
 
+function fade(){
+    $('#messageBox').empty();
+};
+
+
 function saveScore(playerIndex, holeIndex, id){
     players[playerIndex].holeScore[holeIndex] = Number($("#" + id).val());
     if(players[playerIndex].holeScore.includes(0)){
@@ -138,15 +143,18 @@ function saveScore(playerIndex, holeIndex, id){
         if (players[playerIndex].totalScore() < holePar.reduce((a, b) => a + b, 0) ){
             $('#messageBox').empty()
             $('#messageBox').html(
-                `<h4>${players[playerIndex].name},  ${players[playerIndex].totalScore() - holePar.reduce((a, b) => a + b, 0)}, Great Score!</h4>`)
+                `<h3>${players[playerIndex].name},  ${players[playerIndex].totalScore() - holePar.reduce((a, b) => a + b, 0)}, Great Score!</h3>`)
+            setTimeout(fade,3000);
         } else if (players[playerIndex].totalScore() == holePar.reduce((a, b) => a + b, 0)) {
             $('#messageBox').empty()
             $('#messageBox').html(
-                `<h4>${players[playerIndex].name},  zero under but also zero over. Par for the course ain't bad.</h4>`)
+                `<h3>${players[playerIndex].name},  zero under but also zero over. Par for the course ain't bad.</h3>`)
+            setTimeout(fade, 3000);
         }else {
             $('#messageBox').empty()
             $('#messageBox').html(
-                `<h4>${players[playerIndex].name}, +${players[playerIndex].totalScore() - holePar.reduce((a, b) => a + b, 0)}, Best keep practicing</h4>`)
+                `<h3>${players[playerIndex].name}, +${players[playerIndex].totalScore() - holePar.reduce((a, b) => a + b, 0)}, Best keep practicing</h3>`)
+            setTimeout(fade, 3000);
         }
     }
     $('#out'+playerIndex).html(players[playerIndex].outScore());
@@ -171,7 +179,8 @@ function getCourseId() {
     
 }
 
-function getCourseInfo(id) {                
+function getCourseInfo(id) {    
+    if(id != ""){            
     return new Promise((resolve, reject) => {
         $.ajax({
             url: `https://golf-courses-api.herokuapp.com/courses/${id}`,
@@ -189,6 +198,9 @@ function getCourseInfo(id) {
             }
         });
     });
+    }{
+        ""
+    }   
 }
     
 
