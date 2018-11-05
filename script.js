@@ -144,17 +144,17 @@ function saveScore(playerIndex, holeIndex, id){
             $('#messageBox').empty()
             $('#messageBox').html(
                 `<h3>${players[playerIndex].name},  ${players[playerIndex].totalScore() - holePar.reduce((a, b) => a + b, 0)}, Great Score!</h3>`)
-            setTimeout(fade,3000);
+            setTimeout(fade,6000);
         } else if (players[playerIndex].totalScore() == holePar.reduce((a, b) => a + b, 0)) {
             $('#messageBox').empty()
             $('#messageBox').html(
                 `<h3>${players[playerIndex].name},  zero under but also zero over. Par for the course ain't bad.</h3>`)
-            setTimeout(fade, 3000);
+            setTimeout(fade, 6000);
         }else {
             $('#messageBox').empty()
             $('#messageBox').html(
                 `<h3>${players[playerIndex].name}, +${players[playerIndex].totalScore() - holePar.reduce((a, b) => a + b, 0)}, Best keep practicing</h3>`)
-            setTimeout(fade, 3000);
+            setTimeout(fade, 6000);
         }
     }
     $('#out'+playerIndex).html(players[playerIndex].outScore());
