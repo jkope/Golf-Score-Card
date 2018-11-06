@@ -23,7 +23,7 @@ getCourseId();
 function buildCard(holes){
     
     $('.card').html('');
-    $('.card').append(`<div id="col0" class="column">-</div>`);
+    $('.card').append(`<div id="col0" class="column">&nbsp;</div>`);
     for(let i=1; i<=holes.length; i++){
         $('.card').append(`<div id="col${i}" class="column">Hole ${i}</div>`);
     }
@@ -36,8 +36,8 @@ function buildCard(holes){
     for (let i = 1; i <= holes.length; i++) {
         $('#col' + i).append(`<div class='yards' id="yards${i}">${holeYards[i - 1]}</div>`);
     }
-    $('#out').append(`<div class="column">-</div>`);
-    $('#in').append(`<div  class="column">-</div>`);
+    $('#out').append(`<div class="column">&nbsp;</div>`);
+    $('#in').append(`<div  class="column">&nbsp;</div>`);
     $('#total').append(`<div class="column">${holeYards.reduce((a, b) => a + b, 0)}</div>`);
 
 //  Handicap
@@ -45,17 +45,17 @@ function buildCard(holes){
     for (let i = 1; i <= holes.length; i++) {
         $('#col' + i).append(`<div class='handicap' id="handicap${i}">${holeCap[i - 1]}</div>`);
     }
-    $('#out').append(`<div class="column">-</div>`);
-    $('#in').append(`<div  class="column">-</div>`);
-    $('#total').append(`<div class="column">-</div>`);
+    $('#out').append(`<div class="column">&nbsp;</div>`);
+    $('#in').append(`<div  class="column">&nbsp;</div>`);
+    $('#total').append(`<div class="column">&nbsp;</div>`);
 
 //  par
     $('#col0').append(`<div id="par" class="column">Par</div>`);
     for (let i = 1; i <= holes.length; i++) {
         $('#col' +i).append(`<div class='par' id="par${i}">${holePar[i-1]}</div>`);
     }
-    $('#out').append(`<div class="column">-</div>`);
-    $('#in').append(`<div  class="column">-</div>`);
+    $('#out').append(`<div class="column">&nbsp;</div>`);
+    $('#in').append(`<div  class="column">&nbsp;</div>`);
     $('#total').append(`<div class="column">${holePar.reduce((a, b) => a + b, 0)}</div>`);
 
 }
@@ -66,7 +66,7 @@ function addHoles(players,holes){
         $('#col0').append(`<div id="p${p}" class="column">${players[p-1].name}</div>`);
 
         for(h=1; h<=holes.length; h++){
-            $('#col' + h).append(`<input type="number" value="${players[p-1].holeScore[h-1] != 0 ? players[p-1].holeScore[h-1] : "" }" class='hole' id="p${p}h${h}" onblur="saveScore(${p-1},${h-1},'p${p}h${h}')" >`);
+            $('#col' + h).append(`<div class="inputFrame"><input type="number" value="${players[p - 1].holeScore[h - 1] != 0 ? players[p - 1].holeScore[h - 1] : ""}" class='hole' id="p${p}h${h}" onblur="saveScore(${p - 1},${h - 1},'p${p}h${h}')" min="0" oninput="validity.valid||(value='');"></div>`);
         }
         $('#out').append(`<div id="out${p-1}" class="column">${players[p-1].outScore()}</div>`);
         $('#in').append(`<div id="in${p-1}" class="column">${players[p-1].inScore()}</div>`);
@@ -189,9 +189,13 @@ function getCourseInfo(id) {
                 course = response.data;
                 tees = '';
                 tees = course.holes[0].teeBoxes;
-                tees.forEach((e) => { $('#teeSelect').append(`<option value="${e.teeType}">${e.teeType}</option>`) }) 
+                tees.forEach((e) => {if(e.teeType != "auto change location"){
+                    $('#teeSelect').append(`<option value="${e.teeType}">${e.teeType}</option>`) }
+                else{''}
+            }) 
                 $('#courseName').html(course.name);
                 resolve(response);
+    
             },
             error: error => {
                 reject(error);
